@@ -8,9 +8,11 @@ var express = require('express')
   , user = require('./routes/user')
   , cats = require('./routes/cats')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , mongoose = require('mongoose');
 
 var app = express();
+mongoose.connect(process.env.MONGOLAB_URI || 'localhost');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -32,7 +34,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/cats', cats.list);
 app.get('/cats/new', cats.newCat);
-app.get('/cats/color', cats.color);
+app.get('/cats/color/:color', cats.color);
 app.get('/cats/delete/old', cats.deleteOld);
 
 http.createServer(app).listen(app.get('port'), function(){
